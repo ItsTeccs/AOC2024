@@ -24,7 +24,6 @@ func day1(input []byte) {
 
 		rightNum, _ := strconv.Atoi(strings.Split(line, " ")[lineVals-1])
 		rightNums = append(rightNums, rightNum)
-		fmt.Printf("Left: %d, right: %d\n", leftNum, rightNum)
 	}
 
 	slices.Sort(leftNums)
@@ -32,19 +31,42 @@ func day1(input []byte) {
 
 	for i, leftNum := range leftNums {
 		rightNum := rightNums[i]
-		fmt.Printf("Summing (Left: %d, right: %d)\n", leftNum, rightNum)
 		dist := int(math.Abs(float64(leftNum - rightNum)))
-		fmt.Printf("Distance: %d\n", dist)
 		sum += dist
 	}
-	fmt.Printf("The result for day 1 is: %d\n", sum)
+	fmt.Printf("The result for day 1 is: %d", sum)
+}
+
+func day2(input []byte) {
+	s := string(input)
+	lines := strings.Split(s, "\n")
+	simScore := 0
+	rightOccurs := make(map[int]int)
+
+	leftNums := []int{}
+
+	for _, line := range lines {
+		lineVals := len((strings.Split(line, " ")))
+
+		leftNum, _ := strconv.Atoi(strings.Split(line, " ")[0])
+		leftNums = append(leftNums, leftNum)
+
+		rightNum, _ := strconv.Atoi(strings.Split(line, " ")[lineVals-1])
+		rightOccurs[rightNum] += 1
+	}
+
+	for _, num := range leftNums {
+		simScore += (num * rightOccurs[num])
+	}
+
+	fmt.Printf("The result for day 2 is: %d", simScore)
 }
 
 func main() {
 	input, err := os.ReadFile("input.txt")
 	if err != nil {
-		fmt.Printf("An error occured: %v", err)
 		return
 	}
 	day1(input)
+	day2(input)
 }
