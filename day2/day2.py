@@ -35,16 +35,18 @@ def part2(lines):
     for line in lines:
         if not line:
             continue
-        unsafe = 0 
+
         nums = list(map(int, line.split(" ")))
-        for i in range(len(nums)):
-            subarr = nums.copy()
-            subarr.pop(i)
-            if not safe(subarr):
-                unsafe += 1
-            
-        if unsafe < 2:
+
+        if safe(nums):
             ans += 1
+        else:
+            for i in range(len(nums)):
+                subarr = nums.copy()
+                subarr.pop(i)
+                if safe(subarr):
+                    ans += 1
+                    break
     print(ans)
 
 with open("input.txt") as inFile:
