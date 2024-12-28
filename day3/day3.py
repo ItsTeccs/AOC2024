@@ -16,22 +16,31 @@ def calcMuls(text):
     return res
 
 def part1(text):
-    print(calcMuls(text))
+    calcMuls(text)
 
 def part2(text):
-    regexStr = r'(mul\(\d+,\d+\)|do\(\)|don\'t\(\))'
-    curMuls = ""
-    mulStrs = ""
-    for match in re.findall(regexStr, text):
-        if match.startswith("mul"):
-            curMuls += match
-            print(curMuls)
-        elif match.startswith("don't"):
-            mulStrs += curMuls
-            curMuls = ""
-        elif match.startswith("do"):
-            curMuls = ""
-    print(calcMuls(mulStrs))
+    validText = ""
+
+    dontMatch = re.search(dontRegex, text)
+    validText += text[:dontMatch.start()]
+    text = text[dontMatch.end():]
+    dontMatch = re.search(dontRegex, text)
+    # print(validText)
+    # print("---")
+    # print(text)
+
+    while dontMatch:
+        doMatch = re.search(doRegex, text)
+        if doMatch:
+            validText += text[doMatch.end():dontMatch.start()]
+            text = text[dontMatch.end():]
+        dontMatch = re.search(dontRegex, text)
+
+    doMatch = re.search(doRegex, text)
+    if doMatch:
+        validText += text[doMatch.end():]
+    print("Part 2 result: " + str(calcMuls(validText)))
+    # print(text)
 
 with open("input.txt") as inFile:
     text = inFile.read()
